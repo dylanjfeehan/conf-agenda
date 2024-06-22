@@ -9,7 +9,7 @@ import (
 	"net/http"
 	"os"
 
-	api "github.com/dylanjfeehan/conf-agenda/agenda-service/api"
+	api "github.com/dylanjfeehan/conf-agenda/api"
 
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/chi/v5"
