@@ -19,14 +19,15 @@ jobs:
           touch ~/.kube/config
           echo "${{ secrets.KUBE_CONFIG }}" > ~/.kube/config
           export KUBE_CONFIG=$HOME/.kube/config
-          kubectl get deployments
+          kubectl get deployments -n myconf
 
-      #- id: build-image
-       # run: |
-        #  sudo add-apt-repository ppa:cncf-buildpacks/pack-cli
-         # sudo apt-get update
-          #sudo apt-get install pack-cli
-          #pack build aks-demo-app --builder paketobuildpacks/builder-jammy-base
+      - id: build-image
+        run: |
+          sudo add-apt-repository ppa:cncf-buildpacks/pack-cli
+          sudo apt-get update
+          sudo apt-get install pack-cli
+          pack build conf-agenda-app --buildpack paketo-buildpacks/go --builder paketobuildpacks/builder-jammy-base
+
 #
  #     - id: publish-image
   #      run: |
