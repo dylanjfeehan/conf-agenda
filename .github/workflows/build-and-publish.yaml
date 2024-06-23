@@ -1,0 +1,40 @@
+name: np-deploy
+on:
+  #push:
+  #branches:
+  #- master
+  workflow_dispatch:
+
+jobs:
+  register:
+    name: Build image
+    runs-on:
+      ubuntu-latest
+    steps:
+      - id: checkout
+        uses: actions/checkout@v3
+      - id: setup-kub-test
+        run: |
+          mkdir ~/.kube/
+          touch ~/.kube/config
+          echo "${{ secrets.KUBE_CONFIG }}" > ~/.kube/config
+          export KUBE_CONFIG=$HOME/.kube/config
+          kubectl get deployments
+
+      #- id: build-image
+       # run: |
+        #  sudo add-apt-repository ppa:cncf-buildpacks/pack-cli
+         # sudo apt-get update
+          #sudo apt-get install pack-cli
+          #pack build aks-demo-app --builder paketobuildpacks/builder-jammy-base
+#
+ #     - id: publish-image
+  #      run: |
+   #       az acr login --name dylerd --username ${{ secrets.CREGSPUSERNAME }} --password ${{ secrets.CREGSPPASSWORD }}
+    #      echo "Git commit hash used for image tag: ${{github.sha}}"
+     #     docker tag aks-demo-app dylerd.azurecr.io/aks-demo-app:${{ github.sha }}
+      #    docker push dylerd.azurecr.io/aks-demo-app:${{ github.sha }}
+      #- id: deploy-image
+        #run: |
+         # sed -i.backup "s#dylerd.azurecr.io/aks-demo-app:.*#dylerd.azurecr.io/aks-demo-app:${{ github.sha }}#g" config/deployment.yml
+          #kubectl --kubeconfig=$HOME/.kube/config apply -f deployment.yml

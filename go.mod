@@ -1,4 +1,4 @@
-module github.com/dylanjfeehan/conf-agenda/agenda-service
+module github.com/dylanjfeehan/conf-agenda
 
 go 1.21
 
