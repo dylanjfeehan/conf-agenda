@@ -1,4 +1,4 @@
-name: np-deploy
+name: buidl-and-publish-to-acr
 on:
   #push:
   #branches:
@@ -21,21 +21,21 @@ jobs:
           export KUBE_CONFIG=$HOME/.kube/config
           kubectl get deployments -n myconf
 
-      - id: build-image
+      - id: build-app-into-image
         run: |
           sudo add-apt-repository ppa:cncf-buildpacks/pack-cli
           sudo apt-get update
           sudo apt-get install pack-cli
           pack build conf-agenda-app --buildpack paketo-buildpacks/go --builder paketobuildpacks/builder-jammy-base
 
-#
- #     - id: publish-image
-  #      run: |
-   #       az acr login --name dylerd --username ${{ secrets.CREGSPUSERNAME }} --password ${{ secrets.CREGSPPASSWORD }}
-    #      echo "Git commit hash used for image tag: ${{github.sha}}"
-     #     docker tag aks-demo-app dylerd.azurecr.io/aks-demo-app:${{ github.sha }}
-      #    docker push dylerd.azurecr.io/aks-demo-app:${{ github.sha }}
+      - id: publish-image-to-acr
+        run: |
+          az acr login --name dylerd --username ${{ secrets.CREGSPUSERNAME }} --password ${{ secrets.CREGSPPASSWORD }}
+          echo "Git commit hash used for image tag: ${{github.sha}}"
+          docker tag conf-agenda-app dylerd.azurecr.io/conf-agenda-app:${{ github.sha }}
+          docker push dylerd.azurecr.io/conf-agenda-app:${{ github.sha }}
+      
       #- id: deploy-image
         #run: |
-         # sed -i.backup "s#dylerd.azurecr.io/aks-demo-app:.*#dylerd.azurecr.io/aks-demo-app:${{ github.sha }}#g" config/deployment.yml
+          #sed -i.backup "s#dylerd.azurecr.io/aks-demo-app:.*#dylerd.azurecr.io/aks-demo-app:${{ github.sha }}#g" config/deployment.yml
           #kubectl --kubeconfig=$HOME/.kube/config apply -f deployment.yml
