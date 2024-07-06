@@ -11,29 +11,28 @@ jobs:
     runs-on:
       ubuntu-latest
     steps:
-      - id: checkout
+      - name: checkout
         uses: actions/checkout@v3
-      - id: setup-kub-test
-        run: |
-          mkdir ~/.kube/
-          touch ~/.kube/config
-          echo "${{ secrets.KUBE_CONFIG }}" > ~/.kube/config
-          export KUBE_CONFIG=$HOME/.kube/config
-          kubectl get deployments -n myconf
+          #- id: setup-kub-test
+          #run: |
+          #mkdir ~/.kube/
+          #touch ~/.kube/config
+          #echo "${{ secrets.KUBE_CONFIG }}" > ~/.kube/config
+          #export KUBE_CONFIG=$HOME/.kube/config
+          #kubectl get deployments -n myconf
 
-      - id: build-app-into-image
+      - name: Build app into image
         run: |
           sudo add-apt-repository ppa:cncf-buildpacks/pack-cli
           sudo apt-get update
           sudo apt-get install pack-cli
           pack build conf-agenda-app --buildpack paketo-buildpacks/go --builder paketobuildpacks/builder-jammy-base
 
-      - id: publish-image-to-acr
+      - name: Publish image to Dockerhub
         run: |
-          az acr login --name dylerd --username ${{ secrets.CREGSPUSERNAME }} --password ${{ secrets.CREGSPPASSWORD }}
-          echo "Git commit hash used for image tag: ${{github.sha}}"
-          docker tag conf-agenda-app dylerd.azurecr.io/conf-agenda-app:${{ github.sha }}
-          docker push dylerd.azurecr.io/conf-agenda-app:${{ github.sha }}
+          docker login -u dylanfeehan -p ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
+          docker tag conf-agenda-app dylanfeehan/conf-agenda:${{ github.sha }}
+          docker push dylanfeehan/conf-agenda:${{ github.sha }}
       
       #- id: deploy-image
         #run: |
