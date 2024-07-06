@@ -1,4 +1,4 @@
-name: buidl-and-publish-to-acr
+name: Build and publish image to Dockerhub
 on:
   #push:
   #branches:
