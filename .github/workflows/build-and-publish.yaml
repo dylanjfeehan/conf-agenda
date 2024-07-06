@@ -23,10 +23,7 @@ jobs:
 
       - name: Build app into image
         run: |
-          sudo add-apt-repository ppa:cncf-buildpacks/pack-cli
-          sudo apt-get update
-          sudo apt-get install pack-cli
-          pack build conf-agenda-app --buildpack paketo-buildpacks/go --builder paketobuildpacks/builder-jammy-base
+          sudo docker build -t conf-agenda-app .
 
       - name: Publish image to Dockerhub
         run: |
